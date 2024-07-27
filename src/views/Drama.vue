@@ -1,15 +1,13 @@
 <template>
-    <div>
-        Drama
-    </div>
+  <div>
+    番剧
+  </div>
 </template>
 
 <script>
-    export default {
-        name:'Drama'
-    }
+export default {
+  name: "Drama",
+};
 </script>
 
-<style lang="less" scoped>
-
-</style>
+<style lang="less" scoped></style>

@@ -11,7 +11,7 @@
           <Header></Header>
         </el-header>
         <!-- 主体 -->
-        <el-main style="padding: 20px; position: relative">
+        <el-main style=" position: relative">
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -59,7 +59,7 @@ export default {
 }
 
 .el-main {
-  height: 1000px
+  padding: 0;
 }
 
 
