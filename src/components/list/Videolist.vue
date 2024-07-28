@@ -2,11 +2,16 @@
   <div>
     <!-- 标题栏 -->
     <div class="title">
-      <span class="left">{{ title }}</span>
+      <span class="left">
+        <slot>
+          {{ title }}
+        </slot>
+      </span>
       <el-link :underline="false" class="right"
         >{{ right }}<i class="el-icon-view el-icon--right"></i
       ></el-link>
     </div>
+    <hr class="hra"/>
     <!-- 列表栏 -->
     <div class="listcl" v-if="list.length > 0">
       <div class="divlist" v-for="e of list" :key="e.videoid">
@@ -32,7 +37,7 @@
       </div>
     </div>
     <div v-else v-loading="loading">
-      <el-empty :image-size="120" :description="blankmessage"></el-empty>
+      <el-empty :image-size="100" :description="blankmessage"></el-empty>
     </div>
   </div>
 </template>
@@ -59,14 +64,21 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.hra{
+  height: 2px;
+  border: 0;
+  background-color: rgb(200, 200, 200);
+  border-radius: 20px;
+  box-shadow: 0px 0px 2px 0px rgba(98, 98, 98, 0.527);
+}
 .title {
   display: flex;
   justify-content: space-between;
   align-items: end;
   padding: 0 5px 5px;
   color: rgb(92, 92, 92);
-  border-bottom: 3px solid rgb(186, 186, 186);
-  border-radius: 5px;
+  // border-bottom: 3px solid rgb(186, 186, 186);
+  // border-radius: 5px;
   .left {
     font-size: 1.5em;
     font-weight: 600;
@@ -126,7 +138,9 @@ export default {
     }
   }
 }
-
+.el-empty{
+  padding: 10px 0;
+}
 
 
 

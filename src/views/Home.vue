@@ -4,20 +4,27 @@
     <div class="bodyw">
       <Videolist
         :list="todaylist"
-        :title="'今日更新'"
         :right="'更多'"
         :blankmessage="'今天暂未更新'"
         class="listv"
         :loading="todaylistload"
-      ></Videolist>
+      >
+        <template v-slot>
+          <el-badge value="new" class="item">
+            <span class="todaylistclass">今日更新</span>
+          </el-badge>
+        </template>
+      </Videolist>
       <Videolist
         :list="likelist"
-        :title="'猜你喜欢'"
         :right="'更多'"
         class="listv"
         id="likeref"
         :loading="likelistload"
       >
+        <template v-slot>
+          <span class="likelistclass">猜你喜欢❤</span>
+        </template>
       </Videolist>
       <div class="loading">{{ loadingmessage }}</div>
     </div>
@@ -41,7 +48,7 @@ export default {
       todaylistload: false,
       //猜你喜欢列表
       likelist: [],
-      likelistload:false,
+      likelistload: false,
       likeindex: 1,
       //每次查出的数量
       numlist: 10,
@@ -55,6 +62,7 @@ export default {
   created() {
     this.getbslideshow();
     this.gettodaylist();
+    this.getlikelist();
   },
   // 滚动监听
   mounted() {
@@ -82,9 +90,9 @@ export default {
       try {
         //区分开来
         //如果有已经获取到数据了，就让isloading（更多）加载，没有就让likelistload（首次）加载
-        if (this.likelist.length>0) {
+        if (this.likelist.length > 0) {
           this.isloading = true;
-        }else{
+        } else {
           this.likelistload = true;
         }
         const { data } = await this.$API.findapi.getlikelist(
@@ -101,7 +109,7 @@ export default {
         this.likelistload = false;
         //更多加载关闭
         this.isloading = false;
-
+        this.likeindex += 1;
         this.likelist.push(...data);
       } catch (error) {}
     },
@@ -127,7 +135,6 @@ export default {
         el.getBoundingClientRect().bottom - window.innerHeight;
       if (+bottomlength < 300) {
         this.getlikelist();
-        this.likeindex += 1;
       }
     },
   },
@@ -154,6 +161,17 @@ export default {
   height: 50px;
   background-color: rgba(255, 255, 255, 0);
 }
+.item {
+  margin-top: 10px;
+  margin-right: 40px;
+}
+.todaylistclass {
+  color: rgb(238, 104, 104);
+}
+.likelistclass {
+  color: rgb(236, 189, 95);
+}
+
 @media (max-width: 540px) {
   .bodyw {
     padding: 0 10px;

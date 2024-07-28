@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding: 20px;">
     番剧
   </div>
 </template>

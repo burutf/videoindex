@@ -16,9 +16,9 @@ export const navroutes = [
   },
   {
     path: "movie",
-    name: "电影",
+    name: "剧场",
     iconClass: "el-icon-video-camera",
-    meta: { title: "电影", id: "movie" },
+    meta: { title: "剧场", id: "movie" },
     component: () => import("@/views/Movie"),
   },
   {
