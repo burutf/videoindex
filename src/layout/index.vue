@@ -13,6 +13,7 @@
         <!-- 主体 -->
         <el-main style=" position: relative">
           <router-view></router-view>
+          <Floot></Floot>
         </el-main>
       </el-container>
     </el-container>
@@ -24,7 +25,8 @@
 import Aside from "@/layout/Aside.vue";
 //头部
 import Header from "@/layout/Header.vue";
-
+//尾部
+import Floot from "@/layout/Floot.vue";
 export default {
   name: "layout",
   data() {
@@ -33,6 +35,7 @@ export default {
   components: {
     Aside,
     Header,
+    Floot
   },
 };
 </script>

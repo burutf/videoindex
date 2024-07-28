@@ -14,3 +14,8 @@ export const getbslideshow = ()=>{
 export const gettodaylist = (pagesize=0)=>{
     return http.get('/gettodaylist',{params:{pagesize}})
 }
+
+//获取猜你喜欢列表(要获取几条，和当前的第几次获取)
+export const getlikelist = (pagesize=0,pageindex=1)=>{
+    return http.get('/getlikelist',{params:{pagesize,pageindex}})
+}
