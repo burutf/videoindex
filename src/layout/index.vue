@@ -62,6 +62,7 @@ export default {
 }
 
 .el-main {
+  position: relative;
   padding: 0;
 }
 

@@ -1,12 +1,12 @@
 <template>
     <div>
-        Movie
+        Videoplayer
     </div>
 </template>
 
 <script>
     export default {
-        name:'Movie',
+        name:'Videoplayer'
     }
 </script>
 

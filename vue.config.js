@@ -6,7 +6,7 @@ module.exports = {
   devServer: {
     proxy:{
       //当请求前缀是这个时就代理请求
-      '/clientapi':{
+      '/api':{
         //请求的地址
         target:'http://localhost:3030',
       }

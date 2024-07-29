@@ -5,7 +5,7 @@ const http = axios.create({
     //请求的超时
     timeout: 20000,
     //前缀
-    baseURL: '/clientapi'
+    baseURL: '/api'
 });
 //请求拦截器
 http.interceptors.request.use((config) => {

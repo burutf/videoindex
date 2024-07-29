@@ -31,19 +31,20 @@ export default {
   name: "Aside",
   data() {
     return {
-      //路由数组
-      navdata: [],
       isCollapse: false,
     };
-  },
-  mounted() {
-    this.navdata = navroutes;
   },
   computed:{
     //获取当前的url，并点亮对应的导航
     routeindex() {
       return this.$route.path;
     },
+    //筛选路由数组
+    navdata(){
+      return navroutes.filter(e=>{
+        return e.meta.shownav
+      })
+    }
   }
 };
 </script>

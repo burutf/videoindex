@@ -4,30 +4,40 @@ export const navroutes = [
     path: "home",
     name: "首页",
     iconClass: "el-icon-s-home",
-    meta: { title: "首页", id: "home" },
+    meta: { title: "首页", id: "home",shownav:true },
     component: () => import("@/views/Home"),
   },
   {
     path: "drama",
     name: "番剧",
     iconClass: "el-icon-video-camera-solid",
-    meta: { title: "番剧", id: "drama" },
+    meta: { title: "番剧", id: "drama" ,shownav:true},
     component: () => import("@/views/Drama"),
   },
   {
-    path: "movie",
-    name: "剧场",
-    iconClass: "el-icon-video-camera",
-    meta: { title: "剧场", id: "movie" },
-    component: () => import("@/views/Movie"),
-  },
-  {
-    path: "todaydata",
-    name: "今日更新",
+    path: "mylike",
+    name: "我的收藏",
     iconClass: "el-icon-orange",
-    meta: { title: "今日更新", id: "todaydata" },
-    component: () => import("@/views/Todaydata"),
+    meta: { title: "我的收藏", id: "mylike" ,shownav:true},
+    component: () => import("@/views/Mylike"),
   },
+
+  //搜索组件
+  {
+    path:"search",
+    name:'搜索',
+    meta: { title: "搜索", id: "search" ,shownav:false},
+    component:()=>import("@/views/Searchvideo.vue")
+  },
+
+
+  //进行播放
+  {
+    path: "videoplayer/:videoid",
+    name:"播放",
+    meta: { title: "我的收藏", id: "videoplayer" ,shownav:false},
+    component: () => import("@/views/Videoplayer"),
+  }
 ];
 
 export default [

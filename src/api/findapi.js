@@ -1,8 +1,12 @@
 import http from "@/config/axios";
 
-//根据传来的字符串搜索所有的视频
+//根据传来的字符串获取搜索建议
 export const searchall = (text)=>{
-    return http.get('/searchall',{params:{text}})
+    return http.get('/searchallasdasd',{params:{text}})
+}
+//根据传来的字符串获取搜索视频列表
+export const getsearchlist = (text)=>{
+    return http.get('/getsearchlist',{params:{text}})
 }
 
 //获取轮播图列表
@@ -18,4 +22,14 @@ export const gettodaylist = (pagesize=0)=>{
 //获取猜你喜欢列表(要获取几条，和当前的第几次获取)
 export const getlikelist = (pagesize=0,pageindex=1)=>{
     return http.get('/getlikelist',{params:{pagesize,pageindex}})
+}
+
+//获取番剧类型列表
+export const getclassifylist = () => {
+    return http.get('/getclassifylist')
+}
+
+//获取视频列表（筛选排序）
+export const getvideolistzs = (objvalue,sortobj,pagesize = 0, pageindex = 1)=>{
+    return http.get('/getvideolistzs',{params:{objvalue,sortobj,pagesize,pageindex}})
 }

@@ -1,24 +1,30 @@
 <template>
-  <div>
+  <div ref="videolist">
     <!-- 标题栏 -->
-    <div class="title">
+    <div class="title" v-if="title || right">
       <span class="left">
         <slot>
           {{ title }}
         </slot>
       </span>
-      <el-link :underline="false" class="right"
+      <el-link :underline="false" class="right" v-if="right"
         >{{ right }}<i class="el-icon-view el-icon--right"></i
       ></el-link>
     </div>
-    <hr class="hra"/>
+    <hr class="hra" v-if="title || right" />
     <!-- 列表栏 -->
     <div class="listcl" v-if="list.length > 0">
       <div class="divlist" v-for="e of list" :key="e.videoid">
         <div class="imgdiv">
           <el-image :src="urlclassoss(e.cover.url)"></el-image>
-          <span class="statuslist" :style="{backgroundColor:statuscolor(e.status)}">{{ e.status }}</span>
-          <span v-if="e.status==='连播中'" class="bottomlist">最新：第{{ e.updatenum }}集</span>
+          <span
+            class="statuslist"
+            :style="{ backgroundColor: statuscolor(e.status) }"
+            >{{ e.status }}</span
+          >
+          <span v-if="e.status === '连播中'" class="bottomlist"
+            >最新：第{{ e.updatenum }}集</span
+          >
         </div>
         <el-tooltip
           :enterable="false"
@@ -45,26 +51,104 @@
 <script>
 export default {
   name: "Videolist",
-  props: ["title", "right", "list", "blankmessage","loading"],
+
+  props: [
+    //标题
+    "title",
+    //标题右侧文字
+    "right",
+    //列表
+    "list",
+    //空状态描述
+    "blankmessage",
+    //开启滚动加载必须要下面的参数
+    //加载状态
+    "loading",
+    //是否开启滚动加载
+    "isscroll",
+    //每次要加载的数量（通过这个来判断移除监听滚动事件）
+    "numlist",
+  ],
+  data() {
+    return {
+      //节流的id
+      idtime: null,
+    };
+  },
+  // 滚动监听
+  mounted() {
+    if (this.isscroll) {
+      
+      window.addEventListener("scroll", this.throttle); // 监听页面滚动
+    }
+  },
   methods: {
     //url添加处理样式
     urlclassoss(url) {
       return url + process.env.VUE_APP_OSSIMGCLASS;
     },
     //根据完结状态切换颜色
-    statuscolor(status){
-      if (status==='已完结') {
-        return 'rgba(255, 192, 33, 0.8)'
-      }else{
-        return 'rgba(33, 255, 44, 0.8)'
+    statuscolor(status) {
+      if (status === "已完结") {
+        return "rgba(255, 192, 33, 0.8)";
+      } else {
+        return "rgba(33, 255, 44, 0.8)";
       }
-    }
+    },
+    //节流
+    throttle() {
+      //节流
+      if (this.idtime) return;
+      const id = setTimeout(() => {
+        this.handleScroll();
+        this.idtime = null;
+      }, 500);
+      this.idtime = id;
+    },
+    //页面滚动事件
+    handleScroll() {
+      //如果是加载中就中断
+      if (this.loading) return;
+      
+      // const windowscroll = window.scrollY || document.documentElement.scrollTop;
+      //获取元素
+      const el = this.$refs.videolist;
+      //等待页面渲染完成再通知父组件
+      this.$nextTick(() => {
+        //获取元素底部距离视口底部的距离
+        const bottomlength =
+          el.getBoundingClientRect().bottom - window.innerHeight;
+        if (+bottomlength < 300) {
+          this.$emit("scrollload");
+        }
+      });
+    },
+  },
+  //组件销毁前清除滚动事件，清除定时器
+  beforeDestroy() {
+    window.removeEventListener("scroll", this.throttle);
+    clearTimeout(this.idtime);
+  },
+  watch: {
+    //监听传来的数组长度变化，当这次更新的长度小于设置要返回的长度时，就代表着没有多余的数据了
+    //这时清除滚动事件，清除定时器
+    "list.length": {
+      handler(newdata, olddata) {
+        if (olddata === 0) return;
+        //这次加载的数量
+        const numthis = newdata - olddata;
+        if (this.numlist > numthis) {
+          window.removeEventListener("scroll", this.throttle);
+          clearTimeout(this.idtime);
+        }
+      },
+    },
   },
 };
 </script>
 
 <style lang="less" scoped>
-.hra{
+.hra {
   height: 2px;
   border: 0;
   background-color: rgb(200, 200, 200);
@@ -138,11 +222,9 @@ export default {
     }
   }
 }
-.el-empty{
+.el-empty {
   padding: 10px 0;
 }
-
-
 
 @media (max-width: 1800px) {
   .listcl {

@@ -5,14 +5,15 @@
     placeholder="在这里搜索你想看的~"
     :trigger-on-focus="false"
     @select="searchfn"
-    suffix-icon="el-icon-search"
-    class="searchcss"
-  ></el-autocomplete>
+    :select-when-unmatched="true"
+  >
+    <template v-slot:suffix>
+      <i @click="searchfn" class="el-icon-search"></i>
+    </template>
+  </el-autocomplete>
 </template>
 
 <script>
-
-
 export default {
   name: "Searchinput",
   data() {
@@ -26,38 +27,23 @@ export default {
   methods: {
     //进行全局搜索
     searchfn() {
-      console.log("state");
+      if (!this.state) return;
+      this.$router.push({ path: "/search", query: { state: this.state } });
     },
     //搜索建议
     async querySearchAsync(queryString, cb) {
-      var restaurants = this.restaurants;
       console.log(this.state);
       try {
-        const arr = await this.$API.findapi.searchall(this.state);
-        cb(arr);
+        const { data } = await this.$API.findapi.searchall(this.state);
+        cb(data);
       } catch (error) {
         console.log(error);
       }
-
     },
   },
-  components:{
-    
-  }
+  components: {},
 };
 </script>
 
 <style lang="less" scoped>
-.searchcss{
-  width: 500px;
-  margin-right: 20px
-}
-
-
-@media (max-width: 560px) {
-  .searchcss{
-    display: none
-  }
-}
-
 </style>
