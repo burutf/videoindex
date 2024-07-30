@@ -35,7 +35,7 @@ export const navroutes = [
   {
     path: "videoplayer/:videoid",
     name:"播放",
-    meta: { title: "我的收藏", id: "videoplayer" ,shownav:false},
+    meta: { title: "播放", id: "videoplayer" ,shownav:false},
     component: () => import("@/views/Videoplayer"),
   }
 ];

@@ -68,7 +68,7 @@ export default {
       //排序的列表数组
       sortlist: [
         { title: "更新日期", value: "lastupdate" },
-        { title: "开播日期", value: "createddate" },
+        { title: "开播日期", value: "soubdate" },
       ],
       //排序状态
       sortstatus: -1,

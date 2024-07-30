@@ -11,7 +11,7 @@
           <Header></Header>
         </el-header>
         <!-- 主体 -->
-        <el-main style=" position: relative">
+        <el-main style="position: relative">
           <router-view></router-view>
           <Floot></Floot>
         </el-main>
@@ -35,7 +35,7 @@ export default {
   components: {
     Aside,
     Header,
-    Floot
+    Floot,
   },
 };
 </script>
@@ -64,8 +64,8 @@ export default {
 .el-main {
   position: relative;
   padding: 0;
+  // max-width: 1300px;
 }
-
 
 //侧边栏
 .sidebar {
@@ -75,6 +75,7 @@ export default {
 .rightbox {
   margin-left: 200px;
 }
+
 
 @media (max-width: 1025px) {
   //侧边栏

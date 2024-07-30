@@ -1,5 +1,5 @@
 <template>
-  <div ref="videolist">
+  <div ref="videolist" style="width: 100%">
     <!-- 标题栏 -->
     <div class="title" v-if="title || right">
       <span class="left">
@@ -13,10 +13,25 @@
     </div>
     <hr class="hra" v-if="title || right" />
     <!-- 列表栏 -->
-    <div class="listcl" v-if="list.length > 0">
+    <div class="listcl" v-if="list.length > 0" @click="routerfn">
       <div class="divlist" v-for="e of list" :key="e.videoid">
         <div class="imgdiv">
-          <el-image :src="urlclassoss(e.cover.url)"></el-image>
+          <el-image
+            :src="urlclassoss(e.cover.urlname)"
+            :data-videoid="e.videoid"
+            :lazy="true"
+          >
+            <!-- 图片加载中的样式 -->
+            <div slot="placeholder" class="image-slot-loading">
+              <div slot="placeholder" class="image-slot">
+                加载中<span class="dot">...</span>
+              </div>
+            </div>
+            <!-- 图片加载错误的 -->
+            <div slot="error" class="image-slot-error">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
           <span
             class="statuslist"
             :style="{ backgroundColor: statuscolor(e.status) }"
@@ -33,7 +48,7 @@
           placement="bottom"
           effect="light"
         >
-          <span class="listtitle">{{ e.title }}</span>
+          <span class="listtitle" :data-videoid="e.videoid">{{ e.title }}</span>
         </el-tooltip>
         <p>
           <el-tag size="mini" v-for="(tag, i) of e.classify" :key="i">{{
@@ -42,8 +57,19 @@
         </p>
       </div>
     </div>
-    <div v-else v-loading="loading">
-      <el-empty :image-size="100" :description="blankmessage"></el-empty>
+
+    <div
+      v-else
+      v-loading="loading"
+      element-loading-background="rgba(0, 0, 0, 0)"
+      element-loading-text="加载中..."
+      style="height: 200px"
+    >
+      <el-empty
+        v-if="!loading"
+        :image-size="100"
+        :description="blankmessage"
+      ></el-empty>
     </div>
   </div>
 </template>
@@ -78,14 +104,15 @@ export default {
   // 滚动监听
   mounted() {
     if (this.isscroll) {
-      
       window.addEventListener("scroll", this.throttle); // 监听页面滚动
     }
   },
   methods: {
     //url添加处理样式
     urlclassoss(url) {
-      return url + process.env.VUE_APP_OSSIMGCLASS;
+      return (
+        process.env.VUE_APP_CN + "/" + url + process.env.VUE_APP_OSSIMGCLASS
+      );
     },
     //根据完结状态切换颜色
     statuscolor(status) {
@@ -109,7 +136,7 @@ export default {
     handleScroll() {
       //如果是加载中就中断
       if (this.loading) return;
-      
+
       // const windowscroll = window.scrollY || document.documentElement.scrollTop;
       //获取元素
       const el = this.$refs.videolist;
@@ -122,6 +149,12 @@ export default {
           this.$emit("scrollload");
         }
       });
+    },
+    routerfn({ target: { dataset } }) {
+      //代理点击事件，没有设置videoid自定义属性的就中断
+      if (!dataset.videoid) return;
+      //进行跳转到播放页
+      this.$router.push({ path: `/videoplayer/${dataset.videoid}` });
     },
   },
   //组件销毁前清除滚动事件，清除定时器
@@ -178,6 +211,7 @@ export default {
   justify-content: center;
   padding: 10px;
   gap: 15px;
+
   .divlist {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -187,6 +221,7 @@ export default {
     .imgdiv {
       position: relative;
       font-size: 1.1em;
+      cursor: pointer;
       .statuslist {
         position: absolute;
         top: 5px;
@@ -195,9 +230,40 @@ export default {
         color: rgba(255, 255, 255, 1);
         border-radius: 5px;
         padding: 0 2px;
+        pointer-events: none;
       }
       .el-image {
         border-radius: 10px;
+        width: 100%;
+        height: 100%;
+        //加载出错的样式
+        .image-slot-error {
+          position: relative;
+          padding-top: 133.33%;
+          border: 1px solid rgb(68, 68, 68);
+          border-radius: 10px;
+          .el-icon-picture-outline {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            font-size: 1.5em;
+          }
+        }
+        //加载中的样式
+        .image-slot-loading {
+          position: relative;
+          padding-top: 133.33%;
+          border: 1px solid rgb(68, 68, 68);
+          border-radius: 10px;
+          .image-slot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            font-size: 1.1em;
+          }
+        }
         img {
           width: 100%;
           height: 100%;
@@ -212,6 +278,7 @@ export default {
         background-color: rgba(80, 80, 80, 0.514);
         border-radius: 5px;
         padding: 0 2px;
+        pointer-events: none;
       }
     }
 
@@ -219,6 +286,7 @@ export default {
       font-size: 15px;
       font-weight: 500;
       white-space: nowrap;
+      cursor: pointer;
     }
   }
 }

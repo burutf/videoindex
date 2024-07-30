@@ -4,12 +4,12 @@
       <div v-for="(e, i) of list" :key="i" class="swiper-slide">
         <!-- 图片展示区 -->
         <img
-          v-show="e.coverurl"
+          v-show="e.urlname"
           class="imgcls"
-          :src="ossclassurl(e.coverurl)"
+          :src="ossclassurl(e.urlname)"
         />
         <!-- 没有设置图片时展示的 -->
-        <div v-show="!e.coverurl" class="pla">
+        <div v-show="!e.urlname" class="pla">
           <span>暂无图片</span>
         </div>
         <!-- 文字展示区 -->
@@ -106,7 +106,7 @@ export default {
     },
     //进行轮播图处理图片oss样式
     ossclassurl(url) {
-      return url + process.env.VUE_APP_OSSSLICLASS;
+      return process.env.VUE_APP_CN + "/" + url + process.env.VUE_APP_OSSSLICLASS;
     },
   },
   //离开销毁
