@@ -9,7 +9,7 @@ body,
 html {
   background-color: #fafafa;
   //让滚动条提前占位
-  scrollbar-gutter: stable;
+  // scrollbar-gutter: stable;
 }
 ul,
 li {
@@ -25,7 +25,7 @@ a {
   text-decoration: none;
 }
 #app {
-  max-width: 1500px;
+  max-width: 1920px;
   margin: 0 auto;
 }
 </style>

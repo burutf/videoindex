@@ -1,11 +1,12 @@
 <template>
   <div class="swiper">
-    <div class="swiper-wrapper">
+    <div class="swiper-wrapper" @click="bfn">
       <div v-for="(e, i) of list" :key="i" class="swiper-slide">
         <!-- 图片展示区 -->
         <img
           v-show="e.urlname"
           class="imgcls"
+          style="object-fit: cover;"
           :src="ossclassurl(e.urlname)"
         />
         <!-- 没有设置图片时展示的 -->
@@ -25,7 +26,7 @@
           </p>
         </div>
         <!-- 只有当前激活的才会显示这里 -->
-        <div class="topupdate" v-show="actindex === i"></div>
+        <div class="topupdate" :data-id="e.videoid" v-show="actindex === i"></div>
       </div>
     </div>
     <!-- 如果需要分页器 -->
@@ -108,6 +109,12 @@ export default {
     ossclassurl(url) {
       return process.env.VUE_APP_CN + "/" + url + process.env.VUE_APP_OSSSLICLASS;
     },
+    //轮播图的播放跳转
+    bfn({target}){
+      const {id} = target.dataset
+      if (!id) return
+      this.$router.push({path:`/videoplayer/${id}/1`})
+    }
   },
   //离开销毁
   beforeDestroy() {
@@ -160,7 +167,7 @@ export default {
 
 .swiper-slide {
   position: relative;
-  width: 60vw;
+  width: 60%;
   border-radius: 10px;
   box-shadow: 2px 2px 3px 0px #0000008f;
   display: flex;

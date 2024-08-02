@@ -154,7 +154,7 @@ export default {
       //代理点击事件，没有设置videoid自定义属性的就中断
       if (!dataset.videoid) return;
       //进行跳转到播放页
-      this.$router.push({ path: `/videoplayer/${dataset.videoid}` });
+      this.$router.push({ path: `/videoplayer/${dataset.videoid}/1` });
     },
   },
   //组件销毁前清除滚动事件，清除定时器

@@ -4,12 +4,7 @@
     <div class="left">
       <!-- 播放器 -->
       <div class="player">
-
-
-        <video src=""></video>
-
-
-
+        <!-- <Playervideo :urlvideo="urlvideo"></Playervideo> -->
       </div>
       <!-- 视频信息 -->
       <div class="messagevideo">
@@ -19,9 +14,18 @@
           </div>
         </el-image>
         <div class="messageright">
-          <h2>{{ title }}</h2>
+          <div class="title">
+            <h2>{{ title }}</h2>
+            <div class="rightcc" @click="favorite" v-if="!isfavorite">
+              <i class="el-icon-star-on"></i>收藏
+            </div>
+            <div class="rightcc rightdd" @click="favorite" v-else>
+              <i class="el-icon-star-on"></i>取消
+            </div>
+          </div>
+
           <p>{{ status }}-{{ type }}-{{ createdatecc }}</p>
-          <p>{{ stringclassify }}</p>
+          <p>{{ stringclassify }} · {{ videoid }}</p>
           <p class="descclass" :style="{ height: descheight }">
             简介：{{ desc }} <span @click="openclose">{{ desctext }}</span>
           </p>
@@ -35,8 +39,15 @@
           <span>(1/{{ videolistnum }})</span>
         </div>
         <div class="body">
-          <ul>
-            <li v-for="e of videolistsort" :key="e.serial">{{ e.serial }}</li>
+          <ul @click="switchfn">
+            <li
+              v-for="(e, i) of videolist"
+              :class="{ active: serialnow === i + 1 }"
+              :data-id="i + 1"
+              :key="e.name"
+            >
+              {{ i + 1 }}
+            </li>
           </ul>
         </div>
       </div>
@@ -55,8 +66,15 @@
           <span>(1/{{ videolistnum }})</span>
         </div>
         <div class="body">
-          <ul>
-            <li v-for="e of videolistsort" :key="e.serial">{{ e.serial }}</li>
+          <ul @click="switchfn">
+            <li
+              v-for="(e, i) of videolist"
+              :class="{ active: serialnow === i + 1 }"
+              :data-id="i + 1"
+              :key="e.name"
+            >
+              {{ i + 1 }}
+            </li>
           </ul>
         </div>
       </div>
@@ -70,10 +88,15 @@ import moment from "moment";
 
 import Videolist from "@/components/list/Videolist.vue";
 
+//引入视频播放器
+import Playervideo from "@/components/player/Playervideo.vue";
+
 export default {
   name: "Videoplayer",
   data() {
     return {
+      //视频url
+      urlvideo: "",
       //标签
       classify: [],
       //封面
@@ -92,26 +115,36 @@ export default {
       type: "",
       //开播日期
       soubdate: "",
-      //id
-      videoid: "",
       //视频列表
       videolist: [],
       //相关列表
       correlationlist: [],
+      isfavorite: null,
     };
   },
+  //路由更新时进行的操作
+  beforeRouteUpdate(to, from, next) {
+    next();
+    //更新后执行
+    console.log(this.serialnow);
+    this.geturlvideo();
+  },
+  //从别的页面跳转过来时执行
   created() {
     //获取视频信息
     this.getvideo();
+    this.geturlvideo();
     this.getcorrelation();
   },
   methods: {
     //获取视频信息
     async getvideo() {
       try {
-        const videoid = this.$route.params.videoid;
-        const { data } = await this.$API.findapi.getvideo(videoid);
+        //拿到videoid
+        const { data } = await this.$API.findapi.getvideo(this.videoid);
         this.datat(data);
+        //拿到收藏信息
+        this.isfavoritefn();
       } catch (error) {}
     },
     //进行数据解构
@@ -124,7 +157,6 @@ export default {
         status,
         title,
         type,
-        videoid,
         videolist,
       } = data;
       this.classify = classify;
@@ -134,14 +166,25 @@ export default {
       this.status = status;
       this.title = title;
       this.type = type;
-      this.videoid = videoid;
       this.videolist = videolist;
+    },
+    //获取临时视频url
+    async geturlvideo() {
+      try {
+        const { data } = await this.$API.findapi.geturlvideo(
+          this.videoid,
+          this.serialnow
+        );
+        this.urlvideo = data;
+      } catch (error) {}
     },
     //获取相关推荐
     async getcorrelation() {
       try {
-        const videoid = this.$route.params.videoid;
-        const { data } = await this.$API.findapi.getcorrelation(videoid, 10);
+        const { data } = await this.$API.findapi.getcorrelation(
+          this.videoid,
+          10
+        );
         this.correlationlist = data;
       } catch (error) {}
     },
@@ -150,10 +193,47 @@ export default {
       if (this.desctext === "展开") {
         this.descheight = "";
         this.desctext = "收起";
-      }else{
+      } else {
         this.descheight = "36px";
-        this.desctext = "展开"
+        this.desctext = "展开";
       }
+    },
+    //选集
+    switchfn({ target }) {
+      const { id } = target.dataset;
+      if (!id) return;
+      const {
+        params: { videoid },
+      } = this.$route;
+      //进行跳转
+      this.$router.push({ path: `/videoplayer/${videoid}/${id}` });
+    },
+    //收藏
+    favorite() {
+      if (localStorage.hasOwnProperty("favorite")) {
+        //有的话就先判断是要删除还是收藏
+        const arr = JSON.parse(localStorage.getItem("favorite"));
+        if (this.isfavorite) {
+          //删除
+          arr.splice(arr.indexOf(e=>e===this.videoid),1)
+        } else {
+          //收藏
+          arr.push(this.videoid);
+        }
+        localStorage.setItem("favorite", JSON.stringify(arr));
+        //反向收藏状态
+        this.isfavorite = !this.isfavorite
+        console.log(arr);
+      } else {
+        //还没有存储到收藏夹的视频时，直接存
+        localStorage.setItem("favorite", JSON.stringify([this.videoid]));
+      }
+    },
+    //是否已经收藏
+    isfavoritefn() {
+      if (!localStorage.hasOwnProperty("favorite")) return false;
+      const arr = JSON.parse(localStorage.getItem("favorite"));
+      this.isfavorite = arr.some((e) => e === this.videoid);
     },
   },
   computed: {
@@ -161,12 +241,12 @@ export default {
     videolistnum() {
       return this.videolist.length;
     },
-    //视频列表排序
-    videolistsort(){
-        return this.videolist.sort((a,b)=>{
-            return a.serial - b.serial
-        })
-    },
+    // //视频列表排序
+    // videolistsort() {
+    //   return this.videolist.sort((a, b) => {
+    //     return a.serial - b.serial;
+    //   });
+    // },
     //设置oss的图片处理后的封面url
     ossimgurl() {
       if (!this.cover.url) return "";
@@ -180,6 +260,14 @@ export default {
     createdatecc() {
       return moment(this.soubdate).format("YYYY/MM");
     },
+    //返回当前路由的集号
+    serialnow() {
+      return +this.$route.params.serial;
+    },
+    //返回当前路由的videoid
+    videoid() {
+      return this.$route.params.videoid;
+    },
   },
   watch: {
     "$route.params.videoid": {
@@ -192,6 +280,7 @@ export default {
   },
   components: {
     Videolist,
+    Playervideo,
   },
 };
 </script>
@@ -206,8 +295,8 @@ export default {
     flex: 1;
     //播放器
     .player {
-      background-color: rgb(167, 28, 28);
-      height: 500px;
+      // background-color: rgb(167, 28, 28);
+      // height: 500px;
     }
     //视频信息
     .messagevideo {
@@ -224,6 +313,42 @@ export default {
       }
       .messageright {
         flex: 1;
+        .title {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .rightcc {
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            width: 35px;
+            text-wrap: nowrap;
+            direction: rtl;
+            transition: all 0.3s;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            flex-shrink: 0;
+            i {
+              font-size: 1.6em;
+              color: rgb(126, 126, 126);
+              margin-left: 5px;
+            }
+            &:hover {
+              width: 100px;
+              background-color: rgb(255, 174, 0);
+              color: white;
+            }
+          }
+          .rightdd {
+            i {
+              color: rgb(237, 201, 20);
+            }
+            &:hover {
+              background-color: rgb(255, 117, 117);
+            }
+          }
+        }
         p {
           margin-top: 5px;
           font-size: 14px;
@@ -282,6 +407,10 @@ export default {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
+      .active {
+        background-color: #1c7ddf;
+        color: white;
+      }
       li {
         text-align: center;
         background-color: white;

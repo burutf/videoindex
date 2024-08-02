@@ -50,3 +50,8 @@ export const getvideo = (videoid) => {
 export const getcorrelation = (videoid,pagesize=10) =>{
     return http.get("/getcorrelation",{params:{videoid,pagesize}})
 }
+
+//视频临时视频链接
+export const geturlvideo = (videoid,serial) =>{
+  return http.post('/geturlvideo',{videoid,serial})
+}
