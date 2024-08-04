@@ -1,19 +1,14 @@
-# videoindex
+ # 视频前台
 
-## Project setup
-```
-npm install
-```
+用到的技术：Vue2、Element-ui
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+后台管理系统：https://github.com/burutf/videosys
 
-### Compiles and minifies for production
-```
-npm run build
-```
+后台：https://github.com/burutf/videosys
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+前台：https://github.com/burutf/videoindex
+
+## 目前实现的功能
+
+​	视频播放与展示、全局搜索功能、首页轮播图展示、收藏，并使用媒体查询配合弹性盒子做了多端适配
+
