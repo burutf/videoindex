@@ -1,0 +1,7 @@
+# 图片处理样式
+VUE_APP_OSSIMGCLASS=
+# 轮播图处理样式
+VUE_APP_OSSSLICLASS=
+
+# 自定义域名
+VUE_APP_CN=
