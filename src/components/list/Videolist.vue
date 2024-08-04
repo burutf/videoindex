@@ -155,6 +155,7 @@ export default {
       if (!dataset.videoid && !dataset.title) return;
       //进行跳转到播放页
       this.$router.push({ path: `/videoplayer/${dataset.videoid}/1`,query:{title:dataset.title} });
+      this.$emit('clickfn',dataset)
     },
   },
   //组件销毁前清除滚动事件，清除定时器

@@ -54,7 +54,7 @@
 
       <!-- 相关推荐 -->
       <div class="correlation">
-        <Videolist :title="'相关推荐'" :list="correlationlist"></Videolist>
+        <Videolist @clickfn="clickfn" :title="'相关推荐'" :list="correlationlist"></Videolist>
       </div>
     </div>
     <!-- 右边栏 -->
@@ -234,6 +234,17 @@ export default {
       if (!localStorage.hasOwnProperty("favorite")) return false;
       const arr = JSON.parse(localStorage.getItem("favorite"));
       this.isfavorite = arr.some((e) => e === this.videoid);
+    },
+    //相关推荐点击事件
+    clickfn(){
+      this.toTop()
+    },
+    //滚动到顶部
+    toTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     },
   },
   computed: {
