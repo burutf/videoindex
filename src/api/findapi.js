@@ -55,3 +55,8 @@ export const getcorrelation = (videoid,pagesize=10) =>{
 export const geturlvideo = (videoid,serial) =>{
   return http.post('/geturlvideo',{videoid,serial})
 }
+
+//获取收藏的列表
+export const getmfavoritelist = (arr) =>{
+  return http.get('/getmfavoritelist',{params:{arr}})
+}

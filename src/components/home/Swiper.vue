@@ -39,11 +39,13 @@
 </template>
 
 <script>
-// import Swiper bundle with all modules installed
-import Swiper from "swiper/bundle";
+import Swiper from 'swiper';
+import { Navigation, Pagination,EffectCoverflow } from 'swiper/modules';;
 
-// import styles bundle
-import "swiper/css/bundle";
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-coverflow'
 
 export default {
   name: "Swiper",
@@ -63,6 +65,7 @@ export default {
         isloop = true;
       }
       this.swiper = new Swiper(".swiper", {
+        modules: [Navigation, Pagination,EffectCoverflow],
         //无缝滚动
         loop: isloop,
         //选择的样式种类

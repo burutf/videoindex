@@ -4,7 +4,7 @@
     <div class="left">
       <!-- 播放器 -->
       <div class="player">
-        <!-- <Playervideo :urlvideo="urlvideo"></Playervideo> -->
+        <Playervideo :urlvideo="urlvideo"></Playervideo>
       </div>
       <!-- 视频信息 -->
       <div class="messagevideo">

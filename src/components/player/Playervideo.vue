@@ -13,9 +13,8 @@
 <script>
 //引入视频播放器组件
 import "video.js/dist/video-js.css";
-import 'vue-video-player/src/custom-theme.css'
+import "vue-video-player/src/custom-theme.css";
 import { videoPlayer } from "vue-video-player";
-
 
 export default {
   name: "Playervideo",
@@ -28,7 +27,6 @@ export default {
   data() {
     return {
       playerOptions: {
-        playbackRates: [0.5, 1.0, 1.5, 2.0], // 可选的播放速度
         autoplay: false, // 如果为true,浏览器准备好时开始回放
         muted: false, // 默认情况下将会消除任何音频。
         loop: false, // 是否视频一结束就重新开始。
@@ -51,13 +49,23 @@ export default {
           fullscreenToggle: true, // 是否显示全屏按钮
         },
       },
+      // isFullscreen: false,
     };
   },
-  methods: {},
+  mounted() {},
+  methods: {
+    //全屏事件
+    // onFullscreenChange() {
+    //   const player = this.$refs.videoPlayer.player;
+    //   console.log(player.isFullscreen());
+    //   //是否全屏
+    //   this.isFullscreen = player.isFullscreen();
+    // },
+  },
   watch: {
     urlvideo: {
       handler(newdata) {
-        this.$refs.videoPlayer.player.src({ type: 'video/mp4',src:newdata })
+        this.$refs.videoPlayer.player.src({ type: "video/mp4", src: newdata });
       },
     },
   },
@@ -68,13 +76,14 @@ export default {
 </script>
 
 <style lang="less">
-.video /*可不设置*/
-  {
-    // margin: 48px 0;
-  }
-  .vjs-poster {
-    background-color: #aaaaaa00;
-  }
+
+
+.video /*可不设置*/ {
+  // margin: 48px 0;
+}
+.vjs-poster {
+  background-color: #aaaaaa00;
+}
 
 /*播放按钮设置成宽高一致，圆形，居中*/
 .vjs-custom-skin > .video-js .vjs-big-play-button {
@@ -87,17 +96,17 @@ export default {
   text-align: center !important;
 }
 
-.vjs-custom-skin > .video-js .vjs-big-play-button{
+.vjs-custom-skin > .video-js .vjs-big-play-button {
   transform: translateX(-50%);
   margin-left: 0;
 }
-.video-js .vjs-big-play-button .vjs-icon-placeholder:before{
+.video-js .vjs-big-play-button .vjs-icon-placeholder:before {
   text-align: center !important;
 }
 
 /*control-bar布局时flex，通过order调整剩余时间的位置到进度条右边*/
-.vjs-custom-skin > .video-js .vjs-control-bar .vjs-remaining-time{
-  order:3 !important;
+.vjs-custom-skin > .video-js .vjs-control-bar .vjs-remaining-time {
+  order: 3 !important;
 }
 
 /* 进度条下面的播放按钮 */
@@ -107,7 +116,11 @@ export default {
   height: 94px;
   padding: 50px 0 24px 0;
 }
-.vjs-custom-skin > .video-js .vjs-control-bar .vjs-play-control .vjs-icon-placeholder:before {
+.vjs-custom-skin
+  > .video-js
+  .vjs-control-bar
+  .vjs-play-control
+  .vjs-icon-placeholder:before {
   position: absolute;
   font-size: 20px;
   top: 44px;
@@ -125,12 +138,13 @@ export default {
   min-width: auto;
 }
 /* 时间-左 */
-.video-js .vjs-current-time, .vjs-no-flex .vjs-current-time {
+.video-js .vjs-current-time,
+.vjs-no-flex .vjs-current-time {
   min-width: 32px;
   font-size: 12px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 20px;
   margin: 0 0 0 24px !important;
 }
@@ -141,23 +155,28 @@ export default {
   font-size: 12px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: rgba(255,255,255,0.2);
+  color: rgba(255, 255, 255, 0.2);
   line-height: 20px;
 }
 /* 时间-右 */
-.video-js .vjs-duration, .vjs-no-flex .vjs-duration {
+.video-js .vjs-duration,
+.vjs-no-flex .vjs-duration {
   font-size: 12px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
-  color: #FFFFFF;
+  color: #ffffff;
   line-height: 20px;
 }
 .video-js .vjs-control-bar {
   height: 94px;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%)
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
 }
 /*进度条单独放置一行*/
-.vjs-custom-skin > .video-js .vjs-progress-control.vjs-control{
+.vjs-custom-skin > .video-js .vjs-progress-control.vjs-control {
   position: absolute;
   left: 0;
   right: 0;
@@ -167,32 +186,33 @@ export default {
   padding: 0 24px;
 }
 /* 进度条背景轨道 */
-.video-js .vjs-slider{
+.video-js .vjs-slider {
   border-radius: 1em;
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 /* 加载进度条背景色 */
 .video-js .vjs-load-progress {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
 }
 /* 进度条进度 */
-.vjs-custom-skin > .video-js .vjs-play-progress, .vjs-custom-skin > .video-js .vjs-volume-level{
+.vjs-custom-skin > .video-js .vjs-play-progress,
+.vjs-custom-skin > .video-js .vjs-volume-level {
   border-radius: 1px;
-  background: #FFFFFF;
+  background: #ffffff;
 }
- 
+
 /*鼠标进入播放器后，播放按钮颜色会变*/
 // .video-js:hover .vjs-big-play-button, .vjs-custom-skin>.video-js .vjs-big-play-button:active, .vjs-custom-skin>.video-js .vjs-big-play-button:focus{
 //   background-color: rgba(0,0,0,0);
 // }
- 
+
 /*control bar*/
-.video-js .vjs-control-bar{
-  background-color: rgba(0,0,0,0.2) !important;
+.video-js .vjs-control-bar {
+  background-color: rgba(0, 0, 0, 0.2) !important;
 }
- 
+
 /*点击按钮时不显示蓝色边框*/
-.video-js .vjs-control-bar button{
+.video-js .vjs-control-bar button {
   outline: none;
 }
 .vjs-volume-panel .vjs-control .vjs-volume-panel-horizontal {
@@ -212,12 +232,13 @@ export default {
   width: 20px;
   height: 20px;
 }
-.vjs-icon-volume-high:before, .video-js .vjs-mute-control .vjs-icon-placeholder:before {
+.vjs-icon-volume-high:before,
+.video-js .vjs-mute-control .vjs-icon-placeholder:before {
   font-size: 20px;
   width: 20px;
   height: 20px;
   line-height: 20px;
-  color: rgba(255,255,255,0.9);
+  color: rgba(255, 255, 255, 0.9);
 }
 .video-js .vjs-volume-bar {
   margin: 8px 16px 8px 0;
@@ -235,8 +256,9 @@ export default {
 }
 
 /* 全屏按钮图标 */
-.vjs-icon-fullscreen-enter:before, .video-js .vjs-fullscreen-control .vjs-icon-placeholder:before {
-  content: '\f108';
+.vjs-icon-fullscreen-enter:before,
+.video-js .vjs-fullscreen-control .vjs-icon-placeholder:before {
+  content: "\f108";
   width: 30px;
   height: 30px;
   line-height: initial;
@@ -245,8 +267,9 @@ export default {
   cursor: pointer;
 }
 /* 全屏播放后隐藏自定义全屏图标 */
-.vjs-icon-fullscreen-exit:before, .video-js.vjs-fullscreen .vjs-fullscreen-control .vjs-icon-placeholder:before {
-  background: url('');
+.vjs-icon-fullscreen-exit:before,
+.video-js.vjs-fullscreen .vjs-fullscreen-control .vjs-icon-placeholder:before {
+  background: url("");
   line-height: 20px;
   margin-right: 10px;
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a href=""
+    <a href="/"
       ><h1 class="logoh1">
         <img src="../assets/logo.png" style="width: 40px; height: 40px" />Yfeng
       </h1></a

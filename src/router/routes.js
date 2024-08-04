@@ -15,11 +15,11 @@ export const navroutes = [
     component: () => import("@/views/Drama"),
   },
   {
-    path: "mylike",
+    path: "favorite",
     name: "我的收藏",
     iconClass: "el-icon-orange",
-    meta: { title: "我的收藏", id: "mylike" ,shownav:true},
-    component: () => import("@/views/Mylike"),
+    meta: { title: "我的收藏", id: "favorite" ,shownav:true},
+    component: () => import("@/views/Favorite"),
   },
 
   //搜索组件
@@ -35,7 +35,8 @@ export const navroutes = [
   {
     path: "videoplayer/:videoid/:serial",
     name:"播放",
-    meta: { title: "播放", id: "videoplayer" ,shownav:false},
+    meta: {  id: "videoplayer" ,shownav:false},
+    props:true,
     component: () => import("@/views/Videoplayer"),
   }
 ];

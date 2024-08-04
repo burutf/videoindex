@@ -27,4 +27,15 @@ const router = new VueRouter({
   },
 });
 
+//全局后置钩子（进行标题更换）
+router.afterEach((to, from)=>{
+  //拿到标题(播放页没有设置标题，根据传来的title设置标题)
+  const {meta:{title}} = to
+  if (title){
+    document.title = title +" | Yfeng"
+  }else{
+    document.title = to.query.title +" | Yfeng"
+  }
+})
+
 export default router;

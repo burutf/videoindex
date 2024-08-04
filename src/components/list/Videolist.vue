@@ -16,16 +16,16 @@
     <div class="listcl" v-if="list.length > 0" @click="routerfn">
       <div class="divlist" v-for="e of list" :key="e.videoid">
         <div class="imgdiv">
+          <div class="hover"></div>
           <el-image
             :src="urlclassoss(e.cover.urlname)"
             :data-videoid="e.videoid"
+            :data-title="e.title"
             :lazy="true"
           >
             <!-- 图片加载中的样式 -->
-            <div slot="placeholder" class="image-slot-loading">
-              <div slot="placeholder" class="image-slot">
-                加载中<span class="dot">...</span>
-              </div>
+            <div slot="placeholder" class="image-slot-loading" v-loading="true">
+              <div class="image-slot">加载中<span class="dot">...</span></div>
             </div>
             <!-- 图片加载错误的 -->
             <div slot="error" class="image-slot-error">
@@ -48,7 +48,7 @@
           placement="bottom"
           effect="light"
         >
-          <span class="listtitle" :data-videoid="e.videoid">{{ e.title }}</span>
+          <span class="listtitle" :data-videoid="e.videoid" :data-title="e.title">{{ e.title }}</span>
         </el-tooltip>
         <p>
           <el-tag size="mini" v-for="(tag, i) of e.classify" :key="i">{{
@@ -152,9 +152,9 @@ export default {
     },
     routerfn({ target: { dataset } }) {
       //代理点击事件，没有设置videoid自定义属性的就中断
-      if (!dataset.videoid) return;
+      if (!dataset.videoid && !dataset.title) return;
       //进行跳转到播放页
-      this.$router.push({ path: `/videoplayer/${dataset.videoid}/1` });
+      this.$router.push({ path: `/videoplayer/${dataset.videoid}/1`,query:{title:dataset.title} });
     },
   },
   //组件销毁前清除滚动事件，清除定时器
@@ -222,26 +222,41 @@ export default {
       position: relative;
       font-size: 1.1em;
       cursor: pointer;
-      .statuslist {
+      border-radius: 10px;
+      overflow: hidden;
+      padding-top: 133.33%;
+      // 遮罩层样式
+      .hover {
+        width: 100%;
+        height: 100%;
         position: absolute;
-        top: 5px;
-        left: 5px;
-        font-size: 0.8em;
-        color: rgba(255, 255, 255, 1);
-        border-radius: 5px;
-        padding: 0 2px;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        transition: all 0.3s;
+        box-shadow: inset 0px 0px 20px 20px rgba(0, 0, 0, 0);
         pointer-events: none;
       }
+      // 遮罩层样式
+      &:hover .hover {
+        // background-color: rgba(66, 66, 66, 0.483);
+        box-shadow: inset 0px 0px 20px 20px rgb(0 0 0 / 40%);
+      }
+      //图片样式
       .el-image {
-        border-radius: 10px;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         //加载出错的样式
         .image-slot-error {
-          position: relative;
-          padding-top: 133.33%;
-          border: 1px solid rgb(68, 68, 68);
-          border-radius: 10px;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          border: 1px rgb(185, 185, 185) solid;
           .el-icon-picture-outline {
             position: absolute;
             top: 50%;
@@ -252,10 +267,12 @@ export default {
         }
         //加载中的样式
         .image-slot-loading {
-          position: relative;
-          padding-top: 133.33%;
-          border: 1px solid rgb(68, 68, 68);
-          border-radius: 10px;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          background-color: rgb(125, 125, 125);
           .image-slot {
             position: absolute;
             top: 50%;
@@ -268,6 +285,16 @@ export default {
           width: 100%;
           height: 100%;
         }
+      }
+      .statuslist {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        font-size: 0.8em;
+        color: rgba(255, 255, 255, 1);
+        border-radius: 5px;
+        padding: 0 2px;
+        pointer-events: none;
       }
       .bottomlist {
         position: absolute;
