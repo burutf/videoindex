@@ -249,8 +249,8 @@ export default {
     // },
     //设置oss的图片处理后的封面url
     ossimgurl() {
-      if (!this.cover.url) return "";
-      return this.cover.url + process.env.VUE_APP_OSSIMGCLASS;
+      if (!this.cover.urlname) return "";
+      return process.env.VUE_APP_CN + "/" + this.cover.urlname + process.env.VUE_APP_OSSIMGCLASS;
     },
     //标签转字符串
     stringclassify() {
